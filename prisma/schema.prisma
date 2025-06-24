@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model auth {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  eventid   String
+  message   String
+  password  String
+  sensor    String
+  session   String
+  src_ip    String
+  system    String
+  time      Float
+  timestamp String
+  username  String
+}
+
+model event {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  compCS          String[]
+  encCS           String[]
+  eventid         String
+  hassh           String
+  hasshAlgorithms String
+  kexAlgs         String[]
+  keyAlgs         String[]
+  langCS          String[]
+  macCS           String[]
+  message         String
+  sensor          String
+  session         String
+  src_ip          String
+  system          String
+  time            Float
+  timestamp       String
+}
+
+model sensors {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  dst_ip    String
+  dst_port  Int
+  eventid   String
+  message   String
+  protocol  String
+  sensor    String
+  session   String
+  src_ip    String
+  src_port  Int
+  system    String
+  time      Float
+  timestamp String
+}
+
+model sessions {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  dst_ip     String
+  dst_port   Int
+  endtime    String
+  eventid    String
+  message    String
+  protocol   String
+  sensor     String
+  session    String
+  src_ip     String
+  src_port   Int
+  sshversion String?
+  starttime  String
+  system     String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  termsize   Json?
+  time       Float
+  timestamp  String
+}
+
+model users {
+  name        String @id @default(auto()) @map("_id") @db.ObjectId
+  email   String
+}

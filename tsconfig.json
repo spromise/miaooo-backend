@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    // 添加以下配置项
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+    "types": [
+      "node",
+      "cors",
+      "express"
+    ],
+    "moduleResolution": "node"
+  },
+  // 包含所有 TypeScript 文件
+  "include": [
+    "src/**/*.ts"
+  ],
+  // 排除不需要编译的文件
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
