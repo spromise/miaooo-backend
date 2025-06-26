@@ -61,13 +61,15 @@ export const getAllSessions = async (req: Request, res: Response) => {
       orderBy: { time: 'desc' },
       select: {
         id: true,
-        sensor: true,
+        dst_ip: true,
+        dst_port: true,
+        protocol: true,
         session: true,
         src_ip: true,
+        src_port: true,
         starttime: true,
         endtime: true,
-        time: true,
-        sshversion: true
+        time: true
       }
     })
     

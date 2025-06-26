@@ -8,21 +8,21 @@ datasource db {
 }
 
 model auth {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  eventid   String
-  message   String
-  password  String
-  sensor    String
-  session   String
-  src_ip    String
-  system    String
-  time      Float
-  timestamp String
-  username  String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId // *
+  eventid   String /// 
+  message   String /// 报错信息，登录信息
+  password  String ///*登录的密码
+  sensor    String /// 传感器名称
+  session   String /// *会话ID
+  src_ip    String /// *源IP地址
+  system    String /// *系统名称
+  time      Float  /// *时间戳
+  timestamp String /// 时间戳
+  username  String /// *用户名
 }
 
 model event {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId // *
   compCS          String[]
   encCS           String[]
   eventid         String
@@ -59,22 +59,22 @@ model sensors {
 
 model sessions {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  dst_ip     String
-  dst_port   Int
-  endtime    String
+  dst_ip     String /// *
+  dst_port   Int   /// *
+  endtime    String /// *
   eventid    String
   message    String
-  protocol   String
+  protocol   String /// *
   sensor     String
-  session    String
-  src_ip     String
-  src_port   Int
+  session    String /// *
+  src_ip     String /// *
+  src_port   Int    /// *
   sshversion String?
   starttime  String
   system     String
   /// Could not determine type: the field only had null or empty values in the sample set.
   termsize   Json?
-  time       Float
+  time       Float /// *
   timestamp  String
 }
 

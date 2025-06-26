@@ -41,24 +41,33 @@ export const getAuthRecordById = async (req: Request, res: Response) => {
 export const getAllAuthRecords = async (req: Request, res: Response) => {
   try {
     const { username, sensor, page = '1', limit = '10' } = req.query
-    const pageNum = parseInt(page as string)
-    const limitNum = parseInt(limit as string)
-    const skip = (pageNum - 1) * limitNum
-    
-    const where: any = {}
-    if (username) where.username = username as string
-    if (sensor) where.sensor = sensor as string
-    
+    const pageNum = parseInt(page as string);
+    const limitNum = parseInt(limit as string);
+    const skip = (pageNum - 1) * limitNum;
+
+    const where: any = {};
+    if (username) where.username = username as string;
+    if (sensor) where.sensor = sensor as string;
+
     const [records, total] = await Promise.all([
       prisma.auth.findMany({
         where,
         skip,
         take: limitNum,
-        orderBy: { time: 'desc' }
+        orderBy: { time: 'desc' },
+        select: {
+          id: true,
+          password: true,
+          session: true,
+          src_ip: true,
+          system: true,
+          time: true,
+          username: true
+        }
       }),
       prisma.auth.count({ where })
-    ])
-    
+    ]);
+
     res.json({
       data: records,
       pagination: {
@@ -67,12 +76,12 @@ export const getAllAuthRecords = async (req: Request, res: Response) => {
         total,
         totalPages: Math.ceil(total / limitNum)
       }
-    })
+    });
   } catch (error) {
     res.status(500).json({ 
       error: '获取认证记录列表失败',
       details: error instanceof Error ? error.message : String(error)
-    })
+    });
   }
 }
 
