@@ -68,8 +68,7 @@ export const getAllSessions = async (req: Request, res: Response) => {
         src_ip: true,
         src_port: true,
         starttime: true,
-        endtime: true,
-        time: true
+        endtime: true
       }
     })
     

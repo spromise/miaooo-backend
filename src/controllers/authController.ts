@@ -61,7 +61,7 @@ export const getAllAuthRecords = async (req: Request, res: Response) => {
           session: true,
           src_ip: true,
           system: true,
-          time: true,
+          timestamp: true,
           username: true
         }
       }),
