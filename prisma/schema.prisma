@@ -74,7 +74,7 @@ model sessions {
   system     String
   /// Could not determine type: the field only had null or empty values in the sample set.
   termsize   Json?
-  time       Float /// *
+  time       Float ///
   timestamp  String
 }
 
