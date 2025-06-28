@@ -40,7 +40,7 @@ export const getAuthRecordById = async (req: Request, res: Response) => {
 // 获取所有认证记录（带分页和用户名过滤）
 export const getAllAuthRecords = async (req: Request, res: Response) => {
   try {
-    const { username, sensor, page = '1', limit = '10' } = req.query
+    const { username, sensor, page = '100', limit = '50' } = req.query
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
     const skip = (pageNum - 1) * limitNum;

@@ -26,7 +26,7 @@ export const getSessionById = async (req: Request, res: Response) => {
         // 关联查询示例（根据实际需求调整）
         auths: true,
         events: true
-      }
+      } as const // 添加as const断言
     })
     
     if (!session) {
@@ -45,7 +45,7 @@ export const getSessionById = async (req: Request, res: Response) => {
 // 获取所有会话记录（带分页和会话持续时间计算）
 export const getAllSessions = async (req: Request, res: Response) => {
   try {
-    const { sensor, src_ip, page = '1', limit = '10' } = req.query
+    const { sensor, src_ip, page = '100', limit = '50' } = req.query
     const pageNum = parseInt(page as string)
     const limitNum = parseInt(limit as string)
     const skip = (pageNum - 1) * limitNum
