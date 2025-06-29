@@ -63,23 +63,9 @@ app.get('/health', async (req, res) => {
 app.use(notFoundHandler)
 app.use(errorHandler)
 
-// 获取局域网 IP 地址
-const getLocalIP = () => {
-  const interfaces = os.networkInterfaces();
-  for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name] || []) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        return iface.address;
-      }
-    }
-  }
-  return '0.0.0.0';
-};
 
-const localIP = getLocalIP();
-
-app.listen(PORT, localIP, () => {
-  console.log(`🚀 Server running on http://${localIP}:${PORT}`)
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
   
   // 更安全的数据库URL日志
   const dbUrl = process.env.DATABASE_URL || ''

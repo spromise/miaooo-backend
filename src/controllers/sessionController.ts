@@ -72,6 +72,8 @@ export const getAllSessions = async (req: Request, res: Response) => {
       }
     })
     
+
+    
     // 添加持续时间计算
     const sessionsWithDuration = sessions.map((session: { starttime: string | number | Date; endtime: string | number | Date }) => {
       const start = new Date(session.starttime).getTime()
@@ -138,3 +140,40 @@ export const getSessionDurationStats = async (req: Request, res: Response) => {
     })
   }
 }
+
+// 在 sessionController.ts 中添加以下方法
+
+// 获取攻击热力图数据
+export const getAttackHeatmapData = async (req: Request, res: Response) => {
+  try {
+    const { date } = req.query;
+    
+    // 如果没有提供日期，使用今天
+    const targetDate = date ? new Date(date as string) : new Date();
+    const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
+    
+    const sessions = await prisma.sessions.findMany({
+      where: {
+        starttime: {
+          gte: startOfDay,
+          lte: endOfDay
+        }
+      },
+      select: {
+        src_ip: true,
+        starttime: true
+      }
+    });
+    
+    res.json({
+      success: true,
+      data: sessions
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      error: '获取热力图数据失败',
+      details: error instanceof Error ? error.message : String(error)
+    });
+  }
+};
