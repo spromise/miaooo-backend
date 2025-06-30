@@ -82,7 +82,7 @@ model attack_logs {
   response_msg     AttackLogsResponseMsg /// 响应消息*
   status           Int /// 响应状态码*
   timestamp        String
-  timestamp_parsed DateTime              @db2.Date /// *结束时间
+  timestamp_parsed DateTime              @db2.Date /// *到达时间
   uuid             String   /// 数据包id*
 
   @@unique([uuid, method, path, timestamp, peer.ip, peer.port], map: "uuid_1_method_1_path_1_timestamp_1_peer.ip_1_peer.port_1")
