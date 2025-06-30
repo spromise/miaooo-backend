@@ -17,7 +17,7 @@ type AttackLogsHeaders {
   accept          String?
   accept_encoding String? @map("accept-encoding")
   accept_language String? @map("accept-language")
-  connection      String
+  connection      String?
   content_length  String? @map("content-length")
   content_type    String? @map("content-type")
   host            String
@@ -70,20 +70,20 @@ type AttackLogsResponseMsgResponseMessageDetectionPayload {
 
 model attack_logs {
   id               String                @id @default(auto()) @map("_id") @db2.ObjectId
-  processed_at     DateTime              @map("_processed_at") @db2.Date /// 开始处理时间
+  processed_at     DateTime              @map("_processed_at") @db2.Date /// 开始处理时间*
   unique_id        String                @map("_unique_id")
-  attack_category  String       /// 攻击类别
-  cookies          AttackLogsCookies /// 
-  headers          AttackLogsHeaders /// 数据包头
-  method           String /// get post 请求方法
-  path             String /// 请求路径
-  peer             AttackLogsPeer /// 请求端信息
-  post_data        AttackLogsPostData? /// post数据
-  response_msg     AttackLogsResponseMsg /// 响应消息
-  status           Int /// 响应状态码
+  attack_category  String       /// 攻击类别*
+  cookies          AttackLogsCookies /// *
+  headers          AttackLogsHeaders /// 数据包头*
+  method           String /// get post 请求方法*
+  path             String /// 请求路径*
+  peer             AttackLogsPeer /// 请求端信息*
+  post_data        AttackLogsPostData? /// post数据*
+  response_msg     AttackLogsResponseMsg /// 响应消息*
+  status           Int /// 响应状态码*
   timestamp        String
   timestamp_parsed DateTime              @db2.Date /// *结束时间
-  uuid             String   /// 数据包id
+  uuid             String   /// 数据包id*
 
   @@unique([uuid, method, path, timestamp, peer.ip, peer.port], map: "uuid_1_method_1_path_1_timestamp_1_peer.ip_1_peer.port_1")
   @@index([timestamp], map: "timestamp_1")

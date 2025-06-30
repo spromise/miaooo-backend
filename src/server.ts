@@ -1,11 +1,12 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import prisma from './config/db' // 添加这行
+import { mainPrisma } from './config/db' // 添加这行
 import authRoutes from './routes/authRoutes'
 import eventRoutes from './routes/eventRoutes'
 import sensorRoutes from './routes/sensorRoutes'
 import sessionRoutes from './routes/sessionRoutes'
+import attacklogRoutes from './routes/attacklogRoutes'
 import { errorHandler, notFoundHandler } from './utils/errorHandler'
 import os from 'os';
 
@@ -26,12 +27,13 @@ app.use('/api/auth', authRoutes)
 app.use('/api/events', eventRoutes)
 app.use('/api/sensors', sensorRoutes)
 app.use('/api/sessions', sessionRoutes)
+app.use('/api/attacklog', attacklogRoutes)
 
 // 健康检查
 app.get('/health', async (req, res) => {
   try {
     // MongoDB 特定的健康检查 - 使用 $runCommandRaw
-    const result = await prisma.$runCommandRaw({ ping: 1 });
+    const result = await mainPrisma.$runCommandRaw({ ping: 1 });
     
     // 验证响应
     if (result.ok === 1) {
@@ -73,5 +75,5 @@ app.listen(PORT, () => {
     ? dbUrl.split('@')[1]?.split('/')[0] 
     : 'unknown';
   
-  console.log(`📊 Prisma connected to MongoDB at ${safeDbUrl}`)
+  console.log(`📊 mainPrisma connected to MongoDB at ${safeDbUrl}`)
 })

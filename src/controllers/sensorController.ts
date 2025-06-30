@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import prisma from '../config/db'
+import { mainPrisma } from '../config/db'
 
 // 创建传感器记录
 export const createSensor = async (req: Request, res: Response) => {
   try {
-    const sensor = await prisma.sensors.create({
+    const sensor = await mainPrisma.sensors.create({
       data: req.body
     })
     res.status(201).json(sensor)
@@ -20,7 +20,7 @@ export const createSensor = async (req: Request, res: Response) => {
 export const getSensorById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const sensor = await prisma.sensors.findUnique({
+    const sensor = await mainPrisma.sensors.findUnique({
       where: { id }
     })
     
@@ -49,13 +49,13 @@ export const getAllSensors = async (req: Request, res: Response) => {
     if (protocol) where.protocol = protocol as string
     
     const [sensors, total] = await Promise.all([
-      prisma.sensors.findMany({
+      mainPrisma.sensors.findMany({
         where,
         skip,
         take: limitNum,
         orderBy: { time: 'desc' }
       }),
-      prisma.sensors.count({ where })
+      mainPrisma.sensors.count({ where })
     ])
     
     res.json({
@@ -78,14 +78,14 @@ export const getAllSensors = async (req: Request, res: Response) => {
 // 获取端口使用情况统计
 export const getPortUsage = async (req: Request, res: Response) => {
   try {
-    const topSrcPorts = await prisma.sensors.groupBy({
+    const topSrcPorts = await mainPrisma.sensors.groupBy({
       by: ['src_port'],
       _count: { _all: true },
       orderBy: { _count: { _all: 'desc' } },
       take: 10
     })
     
-    const topDstPorts = await prisma.sensors.groupBy({
+    const topDstPorts = await mainPrisma.sensors.groupBy({
       by: ['dst_port'],
       _count: { _all: true },
       orderBy: { _count: { _all: 'desc' } },

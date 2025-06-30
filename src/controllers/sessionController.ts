@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import prisma from '../config/db'
+import { mainPrisma } from '../config/db'
 
 // 创建会话记录
 export const createSession = async (req: Request, res: Response) => {
   try {
-    const session = await prisma.sessions.create({
+    const session = await mainPrisma.sessions.create({
       data: req.body
     })
     res.status(201).json(session)
@@ -20,7 +20,7 @@ export const createSession = async (req: Request, res: Response) => {
 export const getSessionById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const session = await prisma.sessions.findUnique({
+    const session = await mainPrisma.sessions.findUnique({
       where: { id },
       include: {
         // 关联查询示例（根据实际需求调整）
@@ -54,7 +54,7 @@ export const getAllSessions = async (req: Request, res: Response) => {
     if (sensor) where.sensor = sensor as string
     if (src_ip) where.src_ip = src_ip as string
     
-    const sessions = await prisma.sessions.findMany({
+    const sessions = await mainPrisma.sessions.findMany({
       where,
       skip,
       take: limitNum,
@@ -86,7 +86,7 @@ export const getAllSessions = async (req: Request, res: Response) => {
       }
     })
     
-    const total = await prisma.sessions.count({ where })
+    const total = await mainPrisma.sessions.count({ where })
     
     res.json({
       data: sessionsWithDuration,
@@ -108,7 +108,7 @@ export const getAllSessions = async (req: Request, res: Response) => {
 // 获取会话时间分布统计
 export const getSessionDurationStats = async (req: Request, res: Response) => {
   try {
-    const sessions = await prisma.sessions.findMany({
+    const sessions = await mainPrisma.sessions.findMany({
       select: {
         starttime: true,
         endtime: true
@@ -153,7 +153,7 @@ export const getAttackHeatmapData = async (req: Request, res: Response) => {
     const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
     const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
     
-    const sessions = await prisma.sessions.findMany({
+    const sessions = await mainPrisma.sessions.findMany({
       where: {
         starttime: {
           gte: startOfDay,

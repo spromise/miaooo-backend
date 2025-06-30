@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import prisma from '../config/db'
+import { mainPrisma } from '../config/db'
 
 // 创建认证记录
 export const createAuthRecord = async (req: Request, res: Response) => {
   try {
-    const authRecord = await prisma.auth.create({
+    const authRecord = await mainPrisma.auth.create({
       data: req.body
     })
     res.status(201).json(authRecord)
@@ -20,7 +20,7 @@ export const createAuthRecord = async (req: Request, res: Response) => {
 export const getAuthRecordById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const authRecord = await prisma.auth.findUnique({
+    const authRecord = await mainPrisma.auth.findUnique({
       where: { id }
     })
     
@@ -50,7 +50,7 @@ export const getAllAuthRecords = async (req: Request, res: Response) => {
     if (sensor) where.sensor = sensor as string;
 
     const [records, total] = await Promise.all([
-      prisma.auth.findMany({
+      mainPrisma.auth.findMany({
         where,
         skip,
         take: limitNum,
@@ -65,7 +65,7 @@ export const getAllAuthRecords = async (req: Request, res: Response) => {
           username: true
         }
       }),
-      prisma.auth.count({ where })
+      mainPrisma.auth.count({ where })
     ]);
 
     res.json({
@@ -88,7 +88,7 @@ export const getAllAuthRecords = async (req: Request, res: Response) => {
 // 获取常见用户名统计
 export const getTopUsernames = async (req: Request, res: Response) => {
   try {
-    const topUsernames = await prisma.auth.groupBy({
+    const topUsernames = await mainPrisma.auth.groupBy({
       by: ['username'],
       _count: { _all: true },
       orderBy: { _count: { _all: 'desc' } },

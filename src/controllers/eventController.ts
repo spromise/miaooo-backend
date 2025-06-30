@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import prisma from '../config/db'
+import { mainPrisma } from '../config/db'
 
 // 创建事件记录
 export const createEvent = async (req: Request, res: Response) => {
   try {
-    const event = await prisma.event.create({
+    const event = await mainPrisma.event.create({
       data: req.body
     })
     res.status(201).json(event)
@@ -20,7 +20,7 @@ export const createEvent = async (req: Request, res: Response) => {
 export const getEventById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const event = await prisma.event.findUnique({
+    const event = await mainPrisma.event.findUnique({
       where: { id }
     })
     
@@ -50,13 +50,13 @@ export const getAllEvents = async (req: Request, res: Response) => {
     if (src_ip) where.src_ip = src_ip as string
     
     const [events, total] = await Promise.all([
-      prisma.event.findMany({
+      mainPrisma.event.findMany({
         where,
         skip,
         take: limitNum,
         orderBy: { time: 'desc' }
       }),
-      prisma.event.count({ where })
+      mainPrisma.event.count({ where })
     ])
     
     res.json({
@@ -79,14 +79,14 @@ export const getAllEvents = async (req: Request, res: Response) => {
 // 获取事件统计信息
 export const getEventStats = async (req: Request, res: Response) => {
   try {
-    const topSensors = await prisma.event.groupBy({
+    const topSensors = await mainPrisma.event.groupBy({
       by: ['sensor'],
       _count: { _all: true },
       orderBy: { _count: { _all: 'desc' } },
       take: 5
     })
     
-    const topSrcIps = await prisma.event.groupBy({
+    const topSrcIps = await mainPrisma.event.groupBy({
       by: ['src_ip'],
       _count: { _all: true },
       orderBy: { _count: { _all: 'desc' } },
